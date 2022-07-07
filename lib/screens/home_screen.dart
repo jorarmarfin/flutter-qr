@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_qr/models/scan_model.dart';
-import 'package:flutter_application_qr/providers/db_provider.dart';
 import 'package:flutter_application_qr/providers/ui_provider.dart';
 import 'package:flutter_application_qr/screens/screens.dart';
 import 'package:provider/provider.dart';
 
 import '../components/components.dart';
+import '../providers/scan_list_provider.dart';
 import '../providers/ui_provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,9 +15,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historial 2'),
+        title: const Text('Historial', ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.delete_forever))
+          IconButton(
+              onPressed: () {
+                Provider.of<ScanListProvider>(context, listen: false)
+                    .borarTodos();
+              },
+              icon: const Icon(Icons.delete_forever))
         ],
       ),
       bottomNavigationBar: const CustomNavigatorBar(),
@@ -36,14 +40,15 @@ class _HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UiProvider>(context);
     final opcionSeleccionado = uiProvider.selectedMenuOpt;
-    //Leer la DB
-    final tempScan = ScanModel(valor: 'http://google.com');
-    DBProvider.db.getScanAll().then((resp) => print(resp));
+    final scanListProvider =
+        Provider.of<ScanListProvider>(context, listen: false);
 
     switch (opcionSeleccionado) {
       case 0:
+        scanListProvider.cargarScanPorTipo('geo');
         return const MapasScreen();
       case 1:
+        scanListProvider.cargarScanPorTipo('http');
         return const DireccionesScreen();
       default:
         return const MapasScreen();

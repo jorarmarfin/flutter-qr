@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           initialRoute: HomeScreen.routerName,
           routes: {
             HomeScreen.routerName: (context) => const HomeScreen(),
+            MapaScreen.routerName: (context) => const MapaScreen(),
           }),
     );
   }
